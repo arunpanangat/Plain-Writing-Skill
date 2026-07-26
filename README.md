@@ -19,7 +19,13 @@ Start a new conversation and ask Claude to draft something. The skill loads on i
 
 ## What it does
 
-It runs a check over a draft for the common tells: inflated significance, generic positive phrasing in place of a specific fact, a recurring vocabulary such as delve, tapestry, underscore, and pivotal, formatting habits like bold on every term, and the leftover chatbot lines a person forgot to delete. It also keeps the other side, the plain words and real specifics worth restoring. It flags patterns; it is not a blocklist of banned words.
+It works in two halves.
+
+The drafting moves say what to put on the page: state the claim in one plain sentence first, put the specific fact where the significance would go, use is and are, name the source and the year, repeat the word instead of rotating synonyms.
+
+The editing pass runs over a finished draft for the common tells: inflated significance, generic positive phrasing in place of a specific fact, a recurring vocabulary such as delve, tapestry, underscore, and pivotal, formatting habits like bold on every term, and the leftover chatbot lines a person forgot to delete. Every marker carries the move that replaces it, because deleting a phrase without writing the fact underneath leaves the same empty sentence with fewer words.
+
+It also keeps the other side, the plain words and real specifics worth restoring. It flags patterns; it is not a blocklist of banned words.
 
 ## Source
 
