@@ -1,0 +1,22 @@
+[project]
+name = "workbench"
+version = "0.1.0"
+description = "Interview-then-execute runner that enforces a skill sequence in code"
+requires-python = ">=3.10"
+dependencies = [
+    "claude-agent-sdk>=0.1.0",
+    "PyYAML>=6.0",
+]
+
+[project.scripts]
+workbench = "workbench.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["workbench*"]
+
+[tool.setuptools.package-data]
+workbench = ["pipelines.yaml"]

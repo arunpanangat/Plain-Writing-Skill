@@ -1,0 +1,331 @@
+# Each stage's `skills` list is the enforcement point. A stage cannot invoke a
+# skill that is not listed here, so ordering rules become control flow rather
+# than instructions the model may or may not follow.
+
+pipelines:
+
+  writing:
+    description: >
+      Draft or rewrite prose with no cross-source quantitative claim behind it.
+      Emails, memos, notes, summaries, paragraphs.
+    questions:
+      - key: objective
+        ask: What does this piece have to achieve, and what should the reader do after reading it?
+        why: Sets the conclusion that goes first.
+      - key: audience
+        ask: Who reads it, and what do they already know?
+      - key: format
+        ask: What form does it take (email, memo, note, paragraph), and roughly how long?
+      - key: voice
+        ask: Your personal style, or the plain base register only?
+        why: Decides whether arun-writing-style layers on top.
+      - key: sources
+        ask: Which files or documents should this be built on? Say "none" if it is from your head.
+        required: false
+      - key: constraints
+        ask: Anything that must appear, or must not?
+        required: false
+    stages:
+      - name: read-sources
+        title: Read the sources
+        when: sources
+        skills: [source-discipline]
+        allowed_tools: [Read, Grep, Glob]
+        writes: source_findings
+        prompt: >
+          Read the sources named in the brief and ground the findings the draft will
+          rest on. Quote exactly, cite location, and flag anything the sources do not
+          settle. Do not draft anything yet.
+      - name: draft
+        title: Draft
+        skills: [plain-writing, arun-writing-style]
+        allowed_tools: [Read, Write]
+        writes: draft
+        prompt: >
+          Write the piece. Conclusion first, plain English, grouped paragraphs.
+          Apply the personal-voice layer only if the brief's voice field asks for it.
+      - name: edit
+        title: Editing pass
+        skills: [plain-writing]
+        allowed_tools: [Read, Write]
+        prompt: >
+          Run the editing pass over the draft. Strip inflated significance, filler
+          transitions, overused vocabulary, formatting tics, and chatbot leakage.
+          Return the corrected piece in full, then list what you changed and why.
+
+  analysis:
+    description: >
+      A quantitative or cross-source argument. Anything comparing or combining
+      figures from more than one source, benchmarking, cost or ratio work.
+    questions:
+      - key: objective
+        ask: What decision does this analysis serve, and who makes it?
+      - key: question
+        ask: State the question the analysis has to answer, in one sentence.
+      - key: sources
+        ask: Which files, exports, or documents hold the figures?
+      - key: definitions
+        ask: Are there terms whose definition differs between sources, such as cost, area, headcount, or period?
+        required: false
+      - key: deliverable
+        ask: What comes out the other end: memo, table, deck, or note?
+      - key: deadline
+        ask: When is it needed, and what depth does that allow?
+        required: false
+    stages:
+      - name: read-sources
+        title: Read the sources
+        skills: [source-discipline]
+        allowed_tools: [Read, Grep, Glob, Bash]
+        writes: source_findings
+        prompt: >
+          Read every source named in the brief, directly. Record what each one
+          actually says, with exact figures and locations. Do not analyse, compare,
+          or conclude. Note conflicts between sources without resolving them.
+      - name: gates
+        title: Intake gates
+        skills: [evidence-gates]
+        allowed_tools: [Read, Grep, Glob]
+        writes: gate_findings
+        prompt: >
+          Run the intake gates before any analysis: objective lock, source triage,
+          circularity check, definition lock, claim verification, thesis hierarchy.
+          State plainly which sources are disqualified and which claims are unverified.
+          If a gate fails, say so and stop rather than proceeding.
+      - name: analyse
+        title: Analysis
+        skills: [evidence-gates, financial-analysis]
+        allowed_tools: [Read, Write, Bash]
+        writes: analysis
+        prompt: >
+          Do the analysis on the sources that survived triage, using the locked
+          definitions. Show the working. Attach a confidence level and named gaps
+          to every figure that carries one.
+      - name: write
+        title: Write it up
+        skills: [plain-writing, arun-writing-style]
+        allowed_tools: [Read, Write]
+        prompt: >
+          Write the deliverable named in the brief. Conclusion first, then the
+          evidence, then the gaps and confidence. No figure appears without its source.
+
+  market:
+    description: >
+      Market sizing, structure, competitive landscape, white space, entry
+      screening, and the strategic options that follow from it.
+    questions:
+      - key: market
+        ask: Which market: product or service, geography, segment, time horizon?
+      - key: decision
+        ask: What call does this inform: entry, investment, pricing, or portfolio?
+      - key: options_needed
+        ask: Do you need strategic options and a recommendation, or just the fact base?
+      - key: sources
+        ask: Any sources you already have, or should this be researched from scratch?
+        required: false
+      - key: deliverable
+        ask: What form does the output take, and for whom?
+      - key: gcc
+        ask: Is this GCC real estate specifically?
+        why: Routes the GCC-specific skill in or out.
+        required: false
+    stages:
+      - name: read-sources
+        title: Read supplied sources
+        when: sources
+        skills: [source-discipline]
+        allowed_tools: [Read, Grep, Glob]
+        writes: source_findings
+        prompt: >
+          Read the supplied sources and record what they establish about this market,
+          with figures and locations. Do not extrapolate.
+      - name: fact-base
+        title: Build the fact base
+        skills: [market-research, gcc-real-estate-intelligence]
+        allowed_tools: [Read, Write, WebSearch, WebFetch]
+        writes: fact_base
+        prompt: >
+          Build the market fact base: sizing, structure, segments, demand, supply,
+          competitive landscape, white space. Grade every source for credibility and
+          triangulate every figure. Attach confidence and gaps. Use the GCC skill only
+          if the brief says this is GCC real estate.
+      - name: options
+        title: Strategic options
+        when: options_needed
+        skills: [strategic-options]
+        allowed_tools: [Read, Write]
+        writes: options
+        prompt: >
+          Generate and compare the strategic options this fact base supports. Decision
+          criteria, trade-offs, and the recommendation logic. Consume the fact base
+          above; do not build a new one.
+      - name: write
+        title: Write it up
+        skills: [plain-writing, arun-writing-style]
+        allowed_tools: [Read, Write]
+        prompt: >
+          Write the deliverable named in the brief in consulting format. Conclusion
+          first. Every figure carries its source and confidence.
+
+  research-prep:
+    description: >
+      Prepare research before it runs: validate an academic topic, write a brief
+      for a person or team, or write a prompt for an AI deep research tool.
+    questions:
+      - key: executor
+        ask: Who runs the research: an AI deep research tool in one pass, or a person or team over time?
+        why: This alone decides which skill owns the job.
+      - key: academic
+        ask: Is this an academic thesis, dissertation, or paper whose novelty is not yet settled?
+      - key: question
+        ask: What is the research question, as precisely as you can state it now?
+      - key: constraints
+        ask: Time, budget, access, or method constraints?
+        required: false
+      - key: deliverable
+        ask: What has to exist at the end?
+    stages:
+      - name: validate-topic
+        title: Validate the topic
+        when: academic
+        skills: [research-topic-validation]
+        allowed_tools: [Read, Write, WebSearch, WebFetch]
+        writes: topic_verdict
+        prompt: >
+          Test the framing, originality, and feasibility of this topic. Return a clear
+          verdict. If the topic does not survive, say so and stop.
+      - name: deep-research-prompt
+        title: Deep research prompt
+        when: executor == ai
+        skills: [deep-research-prep]
+        allowed_tools: [Read, Write]
+        prompt: >
+          Run the deep-research-prep sequence: decide whether deep research is the right
+          tool, clarify the task, stress-test the plan, then produce the final structured
+          brief. Do not run the research.
+      - name: research-brief
+        title: Research brief
+        when: executor != ai
+        skills: [research-brief-builder]
+        allowed_tools: [Read, Write]
+        prompt: >
+          Produce the research brief: scope, evidence, method, deliverables, and quality
+          controls, specified for the named executor.
+
+  linkedin:
+    description: Public writing on LinkedIn: posts, comments, and evaluating items for post potential.
+    questions:
+      - key: mode
+        ask: A post of your own, a comment on someone else's, or a screen of briefing items for post potential?
+      - key: substance
+        ask: What is the point you want to land, or paste the post you are responding to.
+      - key: angle
+        ask: What is your position, and where do you disagree with the consensus?
+        required: false
+      - key: evidence
+        ask: Any specific fact, figure, or first-hand experience that anchors it?
+        required: false
+    stages:
+      - name: draft
+        title: Draft
+        skills: [linkedin-writing, plain-writing]
+        allowed_tools: [Read, Write]
+        writes: draft
+        prompt: >
+          Produce the LinkedIn output the brief describes.
+      - name: stress-test
+        title: Stress-test
+        skills: [linkedin-writing]
+        allowed_tools: [Read]
+        prompt: >
+          Stress-test the draft. Where is the claim thin, the angle borrowed, or the
+          tone off? Return the tightened version and the specific objections it survives.
+
+  document:
+    description: >
+      Produce or review a formatted deliverable in Word, PowerPoint, Excel, or PDF,
+      including QFZA-branded decks and the controlled QFZ document sets.
+    questions:
+      - key: artefact
+        ask: What file has to come out: docx, pptx, xlsx, or pdf?
+      - key: workstream
+        ask: Which workstream is this: QFZ service charge, APM operating model, QFZ-2025-005 ACM, HBS coursework, DBA articles, or none of these?
+        why: Each has its own controlled register and settled positions.
+      - key: content
+        ask: What goes in it, and what source material exists?
+      - key: branding
+        ask: Does this need official QFZA presentation treatment?
+        required: false
+      - key: review
+        ask: Is this new production, or a review of an existing document?
+    stages:
+      - name: read-sources
+        title: Read the source material
+        skills: [source-discipline]
+        allowed_tools: [Read, Grep, Glob, Bash]
+        writes: source_findings
+        prompt: >
+          Read the source material named in the brief and record exactly what it
+          establishes, with locations. Do not draft.
+      - name: review-existing
+        title: Review the existing document
+        when: review
+        skills: [complete-document-review]
+        allowed_tools: [Read, Grep, Glob, Bash]
+        writes: review_findings
+        prompt: >
+          Review the document in full: verified access, sequential inspection, exact
+          references, reconciliation, coverage matrix, completeness statement.
+      - name: content
+        title: Write the content
+        skills:
+          - plain-writing
+          - arun-writing-style
+          - qfz-service-charge-writing
+          - apm-operating-model-writing
+          - qfz-acm-project
+          - hbs-course-reference
+          - al-khalifa-dba-articles
+        allowed_tools: [Read, Write]
+        writes: content
+        prompt: >
+          Write the content. Use the workstream skill named in the brief and ignore the
+          others; if the workstream is "none", use the writing skills only.
+      - name: produce
+        title: Produce the file
+        skills: [docx, pptx, xlsx, pdf, qfza-presentations, hbs-document-production]
+        allowed_tools: [Read, Write, Bash]
+        prompt: >
+          Produce the file in the format the brief names. Apply QFZA presentation
+          treatment only if the brief asks for it. Report the path you wrote.
+
+  automation:
+    description: A flow, script, scraper, or pipeline that reads a data source and processes what it finds.
+    questions:
+      - key: goal
+        ask: What should the automation do, end to end?
+      - key: source
+        ask: What does it read from: folder, library, drive, inbox, database, or website?
+      - key: access
+        ask: What access do you have to that source, and through which account?
+      - key: destination
+        ask: Where does the output go?
+      - key: frequency
+        ask: One-off, or does it run on a schedule?
+        required: false
+    stages:
+      - name: feasibility
+        title: Feasibility gate
+        skills: [automation-feasibility-gate]
+        allowed_tools: [Read, Bash, WebSearch, WebFetch]
+        writes: feasibility
+        prompt: >
+          Establish the conditions this build depends on before any tool is opened.
+          Name every blocker. If the task is not possible as described, say so and stop.
+      - name: design
+        title: Design
+        skills: [automation-feasibility-gate]
+        allowed_tools: [Read, Write]
+        prompt: >
+          Given a clean feasibility verdict, set out the build: components, data flow,
+          failure modes, and what has to be verified at each step.
