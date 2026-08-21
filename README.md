@@ -27,6 +27,16 @@ The editing pass runs over a finished draft for the common tells: inflated signi
 
 It also keeps the other side, the plain words and real specifics worth restoring. It flags patterns; it is not a blocklist of banned words.
 
+## Also in this repo: the brief skill
+
+`brief.zip` is a second, separate skill. You invoke it by typing `/brief`.
+
+It runs an intake interview, one question at a time, then names the skills the work needs in the order they have to run, and runs them. It holds the routing rules between the other skills, so the gate that has to run before an analysis actually does.
+
+Install it the same way as above, using `brief.zip`. It is unzipped at `.claude/skills/brief/SKILL.md` if you want to read it first.
+
+It assumes you have the rest of the skill set installed. It works without them, but the routing table is what it is for.
+
 ## Source
 
 The catalogue of tells is adapted from the Wikipedia editors' field guide, Signs of AI writing (WP:AISIGNS): https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
