@@ -1,6 +1,6 @@
 ---
 name: plain-writing
-description: Apply to all writing, drafting, and editing by default, unless the user asks for a specific style or voice. This includes chat replies, posts, comments, documents, emails, and any prose. The skill has two halves. The drafting moves say what to put on the page: the claim first, the specific fact, the plain verb, the named source. The editing pass removes theatrical writing, meaning sentences arranged for effect rather than to state the claim, and catches the common AI-writing tells (inflated significance, promotional tone, filler transitions, overused vocabulary, formatting tics, chatbot leakage). Every marker in the pass carries the move that replaces it. Use it whenever producing written output and no other style has been requested.
+description: "Apply to all writing, drafting, and editing by default, unless the user asks for a specific style or voice. This includes chat replies, posts, comments, documents, emails, and any prose. The skill has two halves. The drafting moves say what to put on the page: the claim first, the specific fact, the plain verb, the named source. The editing pass removes theatrical writing, meaning sentences arranged for effect rather than to state the claim, and catches the common AI-writing tells (inflated significance, promotional tone, filler transitions, overused vocabulary, formatting tics, chatbot leakage). Every marker in the pass carries the move that replaces it. Use it whenever producing written output and no other style has been requested."
 ---
 
 # Plain writing
