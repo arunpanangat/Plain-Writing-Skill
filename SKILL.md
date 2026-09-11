@@ -13,6 +13,8 @@ There is a second, overlapping failure. Language models regress to the mean. The
 
 This skill does not run on a banned-phrase list. It runs a test for the first failure and a diagnostic pass for the second. The catalogue in the generic-default pass is descriptive, not a ban. One marker in isolation is usually coincidence, since these patterns come from human writing too. A cluster is the signal. The catalogue of specific tells is adapted from the Wikipedia editors' field guide Signs of AI writing (WP:AISIGNS).
 
+Use the catalogue to improve writing, not to decide whether someone used AI. Its observations come mainly from Wikipedia and do not apply equally to every format or model. A cluster of markers is a reason to inspect the prose and its evidence, not proof of authorship. Keep useful formatting, natural phrasing, and necessary qualifications. Correct the underlying problem before changing its visible style.
+
 ## How the skill runs
 
 A removal-only pass fails in a predictable way. It tells the writer what to delete and never what to put in the hole, so the draft comes back correct and dead, or the deleted phrase returns in a fresh disguise. Deleting "plays a pivotal role" without writing what the thing actually did leaves the same empty sentence with fewer words.
@@ -35,7 +37,7 @@ Eleven moves. Each one is the positive form of a failure catalogued further down
 
 4. **Name the source and match the claim to what it supports.** One named study, one named report, one named person. If two sources say it, write two, not "experts argue" or "several publications." If the source supports a narrower claim than the one you want, write the narrower claim.
 
-5. **Repeat the word.** Call the same thing the same thing all the way through. Artists stay artists; they do not become creators and then practitioners. The plain repeat is clearer than the rotation.
+5. **Keep terminology consistent.** Call the same concept by the same name where precision matters. Do not rotate between labels merely to avoid repetition. Natural variation is fine when it creates no ambiguity.
 
 6. **Let sentence length follow the content.** Vary it because the argument varies, not to set up a beat. A short sentence after a long one is good when it marks a real turn.
 
@@ -68,12 +70,14 @@ Run this on every piece, before sending.
 Do not ban rhythm. Flat, dead, monotone prose is its own failure, and over-correcting produces it.
 
 Craft, keep it:
+
 - A short sentence after a long one when it marks a real turn in the argument
 - Parallel structure on a genuine list
 - Varied sentence length so prose is readable
 - A concrete example or number that the point actually rests on
 
 Theatrics, cut it:
+
 - The contrastive flip used for weight: "It is not X. It is Y." or "X is not A, it is B."
 - A descending or ascending stack of numbers or fragments built to spring a final line
 - Sentence fragments standing in for sentences to add impact
@@ -120,6 +124,9 @@ A marker is a symptom, not the fault itself. The fault is generic thinking: a sp
 **Vague attribution and overgeneralized opinion.** An opinion or claim credited to an unnamed authority: industry reports, observers have cited, experts argue, some critics argue, several sources or publications when only one or two are cited. The related move is overgeneralization: presenting one or two sources as a widely held view, or implying a list of examples is open-ended (such as ...) when the source gives no sign of that. This is weasel wording.
 **Do:** name the source and the year. Match the claim to what that source supports. If the list is closed, close it.
 
+**Vague relationships.** Saying that a person or organisation is associated with, connected to, or involved in something without explaining the relationship. This leaves the reader unable to tell whether the person led the work, funded it, advised on it, or merely attended.
+**Do:** state the supported role and action. "She managed the project" is clearer than "She was associated with project delivery." If the source establishes only an association, preserve that limit. Do not invent a more specific relationship.
+
 **Notability and coverage puffery.** Proving importance by naming where a subject was covered and what tier the outlets are, rather than saying what the subject did: profiled in leading outlets, featured in independent coverage, cited in national media, written by a leading expert, maintains an active social media presence.
 **Do:** state what the subject built, decided, published, or changed.
 
@@ -129,8 +136,8 @@ A marker is a symptom, not the fault itself. The fault is generic thinking: a sp
 **Copula avoidance.** Replacing plain is or are with serves as, stands as, marks, represents, boasts, features, maintains, offers, or refers to. Studies found is and are dropping measurably in AI-revised text.
 **Do:** write is or are.
 
-**Elegant variation.** Reaching for a synonym to avoid repeating a word, driven by the model's repetition penalty, so one thing gets three names in a paragraph (artists, then creators, then practitioners).
-**Do:** repeat the first word every time.
+**Terminology drift.** Changing the name of the same thing without a change in meaning can make the reader wonder whether a new subject has been introduced. Wikipedia now treats elegant variation as a historical AI indicator. Keep this check because consistent terminology helps readers, not because synonym use proves AI authorship.
+**Do:** keep names, technical terms, and category labels consistent. Use natural variation where the reference remains clear. Do not replace genuinely different concepts with one word merely to enforce repetition.
 
 **Negative parallelism and rule of three.** Both are already caught by the test above: the flip in its forms ("it is not X, it is Y"; "not only X but also Y"; and the reversed "X rather than Y," common in Grok), and the reflexive stack of three adjectives or items. The catalogue lists both as top tells. Negation can run across two sentences, not only within one.
 **Do:** write the positive half on its own. For the stack, keep the items that are actually distinct, which is usually two.
@@ -147,6 +154,16 @@ These are about reaching for layout when a sentence would do. The single **Do** 
 - Curly or smart quotes and apostrophes are a weak marker only, since word processors and phones insert them automatically. Do not weight them.
 - Native format matters. Producing Markdown asterisks and hashes when the target is plain text or another format signals a paste straight from a chatbot. Write in the target format.
 - Small unnecessary tables for content that would read better as a sentence or two.
+- Headings that add no useful structure, including empty parent headings, skipped levels, and repeated top-level headings. Use a coherent hierarchy. Keep a parent heading without introductory text when it usefully groups the subsections.
+- Horizontal rules between every section when headings and spacing already separate the content. Keep dividers only where they mark a meaningful boundary or serve the requested format.
+
+### Citation integrity
+
+A named source can still be the wrong source. A working link can lead to an unrelated paper, and a genuine reference can fail to support the sentence attached to it.
+
+**Do:** when supplying or checking citations, confirm that the source exists, that its title and identifying details match, and that it supports the claim in context. Check relevant dates, units, comparison bases, and qualifications. Link to the source itself where possible. For quotations or specific book claims, give a page or another usable locator when available.
+
+Do not invent missing reference details. If the source cannot be accessed, identify what remains unverified. When the task is only to edit supplied wording, preserve citations and flag apparent problems without implying that a full source check has been completed.
 
 ### Chatbot leakage
 
@@ -157,6 +174,7 @@ Text meant for the user that should never reach the reader. The single **Do** fo
 - Knowledge-cutoff or missing-source disclaimers: as of my last update, up to my last training update, based on available information, while specific details are limited, not widely documented. When the missing information is about a person, the model invents that they maintain a low profile or keep personal details private. All of it is speculation. If a fact is missing, say which fact is missing and where it would come from.
 - Placeholder text left unfilled: [Your Name], [describe the specific section], a 2025-xx-xx access date, INSERT_SOURCE_URL. The template opener "I hope this message finds you well" shows up here too. Fill every placeholder or flag it to the user outside the document.
 - Self-describing meta about the edit itself: I formalized the tone, ensured neutrality, improved clarity and flow.
+- Internal citation tokens, tool references, or broken output markup left in the deliverable. Replace them with usable citations or the intended formatting. Preserve such text when the user is explicitly discussing it as code or an example.
 
 ### English-variety drift
 
@@ -197,6 +215,10 @@ Each line pairs the cut with the replacement. A cut without its replacement is a
 | Is there a cluster of generic markers? | The generic phrasing | Specific facts, named sources, plain verbs |
 | Did I dress up or hedge away plain words, copulas and true definite statements? | The dressed-up version | Is, are, wrote, used, the first, the only |
 | Am I about to flatten a lone formal word or single dash? | Nothing | Leave it. One marker is not the machine register |
+| Is each relationship as specific as the evidence allows? | Vague association that hides a known role | The supported role and action |
+| Does each citation identify the right source and support the claim? | Unsupported attribution or invented reference details | A supported claim and usable citation, or an explicit verification gap |
+| Does the structure help the reader navigate? | Redundant headings and dividers | A coherent hierarchy suited to the format |
+| Is the finished output free of internal markup? | Exposed tool and citation tokens | The intended formatting and usable references |
 
 ## When this skill does not apply
 
